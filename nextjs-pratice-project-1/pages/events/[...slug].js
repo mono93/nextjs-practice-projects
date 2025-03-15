@@ -1,34 +1,63 @@
-import { useRouter } from "next/router";
-import { getFilteredEvents } from "../../dummy-data";
 import EventList from "../../components/events/event-list";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
 import ResultsTitle from "../../components/events/results-title";
 
-const FilteredEventDetailsPage = () => {
+const FilteredEventDetailsPage = (props) => {
+  const [loadedEvents, setLoadedEvents] = useState();
   const router = useRouter();
-  const filteredData = router.query.slug;
 
-  if (!filteredData) {
-    return <p className="center"> Loading.. </p>;
+  const filterData = router.query.slug;
+
+  const { data, error } = useSWR(
+    "https://nextjs-practice-projects-default-rtdb.asia-southeast1.firebasedatabase.app/events.json",
+    (url) => fetch(url).then((res) => res.json())
+  );
+
+  useEffect(() => {
+    if (data) {
+      const events = [];
+
+      for (const key in data) {
+        events.push({
+          id: key,
+          ...data[key],
+        });
+      }
+
+      setLoadedEvents(events);
+    }
+  }, [data]);
+
+  if (!loadedEvents) {
+    return <p className="center">Loading...</p>;
   }
 
-  const filteredYear = +filteredData[0];
-  const filteredMonth = +filteredData[1];
+  const filteredYear = filterData[0];
+  const filteredMonth = filterData[1];
+
+  const numYear = +filteredYear;
+  const numMonth = +filteredMonth;
 
   if (
-    isNaN(filteredYear) ||
-    isNaN(filteredMonth) ||
-    filteredYear > 2030 ||
-    filteredYear < 2019 ||
-    filteredMonth < 1 ||
-    filteredMonth > 12
+    isNaN(numYear) ||
+    isNaN(numMonth) ||
+    numYear > 2030 ||
+    numYear < 2021 ||
+    numMonth < 1 ||
+    numMonth > 12 ||
+    error
   ) {
     return <p> Invalid filter. please adjust your vaue</p>;
   }
 
-  const filteredEvents = getFilteredEvents({
-    year: filteredYear,
-    month: filteredMonth,
+  const filteredEvents = loadedEvents.filter((event) => {
+    const eventDate = new Date(event.date);
+    return (
+      eventDate.getFullYear() === numYear &&
+      eventDate.getMonth() === numMonth - 1
+    );
   });
 
   if (!filteredEvents || filteredEvents.length === 0) {
