@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import classes from '../../styles/post-header.module.css';
+import classes from '../../../styles/post-header.module.css';
 
 function PostHeader(props) {
   const { title, image } = props;

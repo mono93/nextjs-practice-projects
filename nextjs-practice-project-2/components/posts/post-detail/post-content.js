@@ -6,12 +6,13 @@ import js from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
 import css from 'react-syntax-highlighter/dist/cjs/languages/prism/css';
 
 import PostHeader from './post-header';
-import classes from '../../styles/post-content.module.css';
+import classes from '../../../styles/post-content.module.css';
 
 SyntaxHighlighter.registerLanguage('js', js);
 SyntaxHighlighter.registerLanguage('css', css);
 
 function PostContent(props) {
+  console.log(props)
   const { post } = props;
 
   const imagePath = `/images/posts/${post.slug}/${post.image}`;

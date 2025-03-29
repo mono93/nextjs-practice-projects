@@ -2,17 +2,7 @@ import Hero from "@/components/home-page/hero";
 import { Fragment } from "react";
 import Head from "next/head";
 import FeaturedPosts from "@/components/home-page/featured-posts";
-
-const DUMMY_POSTS = [
-  {
-    slug: "getting-started-with-nextjs",
-    title: "Getting Started with NextJS",
-    image: "getting-started-nextjs.png",
-    excerpt:
-      "NextJS is a the React framework for production it makes building fullstack",
-    date: "2022-02-10",
-  },
-];
+import { getFeaturedPosts } from '../lib/posts-util';
 
 const HomePage = (props) => {
   return (
@@ -25,13 +15,13 @@ const HomePage = (props) => {
         />
       </Head>
       <Hero />
-      <FeaturedPosts posts={DUMMY_POSTS} />
+      <FeaturedPosts posts={props.posts} />
     </Fragment>
   );
 };
 
 export function getStaticProps() {
-  const featuredPosts = [];
+  const featuredPosts = getFeaturedPosts();
 
   return {
     props: {

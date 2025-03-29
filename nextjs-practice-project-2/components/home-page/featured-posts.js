@@ -1,5 +1,5 @@
 import classes from "../../styles/featured-posts.module.css";
-import PostsGrid from "../posts/post-grid";
+import PostsGrid from "../posts/posts-grid";
 
 const FeaturedPosts = (props) => {
   return (
