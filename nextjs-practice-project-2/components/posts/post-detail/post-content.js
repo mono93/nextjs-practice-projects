@@ -12,7 +12,6 @@ SyntaxHighlighter.registerLanguage('js', js);
 SyntaxHighlighter.registerLanguage('css', css);
 
 function PostContent(props) {
-  console.log(props)
   const { post } = props;
 
   const imagePath = `/images/posts/${post.slug}/${post.image}`;
